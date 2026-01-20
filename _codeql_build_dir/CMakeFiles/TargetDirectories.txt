@@ -1,3 +1,0 @@
-/home/runner/work/silo/silo/_codeql_build_dir/CMakeFiles/silo.dir
-/home/runner/work/silo/silo/_codeql_build_dir/CMakeFiles/edit_cache.dir
-/home/runner/work/silo/silo/_codeql_build_dir/CMakeFiles/rebuild_cache.dir
