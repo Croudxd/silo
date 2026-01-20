@@ -3,32 +3,76 @@
 #include <iostream>
 #include <filesystem>
 #include "database.h"
+#include "vault.h"
 
+
+/*
+ *
+ * Idea of this project is to speed up moving files.
+ * Currently when we move files we need to type mv address/ address which is long and boring.
+ * We want to be able to stash/push a file into a temp directory and then we can pop where we want it to be. 
+ * We can do this with multiple files in several buffers so we can do 
+ *
+ * silo push buffer1 file1 file2 file3 file4
+ * silo pop buffer1
+ *
+ * silo pop buffer1 file1
+ *
+ * silo list
+ *
+ * silo clear
+ *
+ */
 namespace fs = std::filesystem;
+
+static fs::path path = "/home/ben/temp";
+
+static std::string_view HELP_MESSAGE = 
+    "Silo - A minimalist file stashing utility\n\n"
+    "Usage:\n"
+    "  silo push <buffer> <path>    Stash a file into a named buffer\n"
+    "  silo pop  <buffer>           Restore the most recent file from a buffer\n"
+    "  silo list                    Show all buffers and stashed files\n"
+    "  silo help                    Show this message\n\n"
+    "Examples:\n"
+    "  silo push work report.pdf\n"
+    "  silo pop work\n";
+
 
 int main (int argc, char* argv[])
 {
+    if ( argc < 2 ) 
+    { 
+        std::cout << HELP_MESSAGE;
+        return 0;
+    }
 
+    fs::path cwd = fs::current_path();
+    Vault v = { path };
     Database db;
     if ( !db.init() ) return 0;
 
     std::vector<std::string> args(argv, argv + argc);
 
-    if ( argc <= 2 ) 
-    { 
-        std::cout << "use more inputs dumbass";
-        return 0;
+    //Commands
+    if (args[1] == "push")
+    {
+        std::string buffer = args[2];
+        for ( auto x = 3; x < args.size(); x++)
+        { 
+            auto file_path = cwd.string()+"/"+args[x];
+            db.add(buffer, file_path) ;
+            v.store(file_path, args[x]) ;
+        }
     }
+    if (args[1] == "help")
+    {
+        std::cout << HELP_MESSAGE;
+    }
+    if (args[1] == "pop")
+    {
 
-    //grab the current working directory.
-    fs::path cwd = fs::current_path();
-
-    std::string buffer = args[1];
-
-    std::vector<std::string> files ;
-    for ( auto& file : args) files.push_back(file);
-
-    
+    }
 
     return 0;
 }
