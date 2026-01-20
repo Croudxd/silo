@@ -12,6 +12,7 @@ class Database
         Database () : db(nullptr) {}
         bool init ();
         ~Database ();
-       int add (std::string buffer, std::string file_path);
+       int push (std::string buffer, std::string file_path);
+       int pop (std::string buffer, std::string file_path);
         std::string get_path ();
 };

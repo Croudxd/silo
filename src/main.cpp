@@ -61,8 +61,8 @@ int main (int argc, char* argv[])
         for ( auto x = 3; x < args.size(); x++)
         { 
             auto file_path = cwd.string()+"/"+args[x];
-            db.add(buffer, file_path) ;
-            v.store(file_path, args[x]) ;
+            db.push(buffer, file_path) ;
+            v.push(file_path, args[x]) ;
         }
     }
     if (args[1] == "help")

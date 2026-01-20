@@ -29,20 +29,3 @@ fs::path get_db_path()
 }
 
 
-bool relocate_file(const fs::path& source, const fs::path& destination) {
-    
-    try {
-        if (destination.has_parent_path()) {
-            fs::create_directories(destination.parent_path());
-        }
-
-        fs::rename(source, destination);
-        return true;
-    } catch (const fs::filesystem_error& e) {
-        std::cerr << "File system Error: " << e.what() << std::endl;
-        return false;
-    }
-}
-
-
-

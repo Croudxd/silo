@@ -9,8 +9,8 @@ class Vault
     public:
         Vault (fs::path storage) ;   
         ~Vault ();   
-        bool store(const fs::path& destination, std::string name);
-        bool retrieve(const fs::path& destination, std::string name);
+        bool push(const fs::path& destination, std::string name);
+        bool pop(const fs::path& destination, std::string name);
 
     private:
         bool relocate_file(const fs::path& source, const fs::path& destination); 
