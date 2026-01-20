@@ -26,15 +26,15 @@ bool Database::init()
     const char* sql = 
         "PRAGMA foreign_keys = ON;" 
         "CREATE TABLE IF NOT EXISTS buffers ("
-        "  buffer_index INTEGER PRIMARY KEY"
+        "  buffer_name TEXT PRIMARY KEY"
         ");"
         "CREATE TABLE IF NOT EXISTS files ("
         "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "  buffer_index TEXT NOT NULL,"
+        "  buffer_name TEXT NOT NULL,"
         "  original_path TEXT NOT NULL,"
         "  filename TEXT NOT NULL,"
         "  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,"
-        "  FOREIGN KEY(buffer_index) REFERENCES buffers(buffer_index) ON DELETE CASCADE"
+        "  FOREIGN KEY(buffer_name) REFERENCES buffers(buffer_name) ON DELETE CASCADE"
         ");";
 
 
@@ -136,7 +136,6 @@ int Database::remove_file(std::string buffer, std::string filename) {
 
         if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
             sqlite3_bind_text(stmt, 1, buffer.c_str(), -1, SQLITE_STATIC);
-            sqlite3_bind_text(stmt, 2, filename.c_str(), -1, SQLITE_STATIC);
             
             sqlite3_step(stmt);
         }

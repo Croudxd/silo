@@ -25,7 +25,27 @@
  */
 namespace fs = std::filesystem;
 
-static fs::path path = "/home/ben/temp";
+fs::path get_storage_path()
+{
+    const char* xdg_data = std::getenv("XDG_DATA_HOME");
+    fs::path base_path;
+
+    if (xdg_data) {
+        base_path = fs::path(xdg_data);
+    } else {
+        const char* home = std::getenv("HOME");
+        if (!home) return "/tmp/silo_storage";
+        base_path = fs::path(home) / ".local" / "share";
+    }
+
+    fs::path storage_dir = base_path / "silo" / "storage";
+
+    if (!fs::exists(storage_dir)) {
+        fs::create_directories(storage_dir);
+    }
+
+    return storage_dir;
+}
 
 constexpr std::string_view HELP_MESSAGE = 
     "Silo - Minimalist file stashing\n\n"
@@ -50,7 +70,8 @@ int main (int argc, char* argv[])
     std::vector<std::string> args(argv, argv + argc);
 
     fs::path cwd = fs::current_path();
-    Vault v = { path };
+    fs::path storage_path = get_storage_path();
+    Vault v = { storage_path };
     Database db;
     Silo s = {v, db, cwd};
     if ( !db.init() ) return 0;
