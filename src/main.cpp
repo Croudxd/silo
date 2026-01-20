@@ -4,7 +4,7 @@
 #include <filesystem>
 #include "database.h"
 #include "vault.h"
-
+#include "silo.h"
 
 /*
  *
@@ -31,7 +31,7 @@ static std::string_view HELP_MESSAGE =
     "Silo - A minimalist file stashing utility\n\n"
     "Usage:\n"
     "  silo push <buffer> <path>    Stash a file into a named buffer\n"
-    "  silo pop  <buffer>           Restore the most recent file from a buffer\n"
+    "  silo pop  <buffer> <path>    Restore the most recent file from a buffer\n"
     "  silo list                    Show all buffers and stashed files\n"
     "  silo help                    Show this message\n\n"
     "Examples:\n"
@@ -41,38 +41,30 @@ static std::string_view HELP_MESSAGE =
 
 int main (int argc, char* argv[])
 {
-    if ( argc < 2 ) 
+    if ( argc <= 2 ) 
     { 
         std::cout << HELP_MESSAGE;
         return 0;
     }
 
+    std::vector<std::string> args(argv, argv + argc);
+
     fs::path cwd = fs::current_path();
     Vault v = { path };
     Database db;
+    Silo s = {v, db, cwd};
     if ( !db.init() ) return 0;
+    auto &map = s.get_map();
 
-    std::vector<std::string> args(argv, argv + argc);
+    std::string commandName = args[1];
 
-    //Commands
-    if (args[1] == "push")
-    {
-        std::string buffer = args[2];
-        for ( auto x = 3; x < args.size(); x++)
-        { 
-            auto file_path = cwd.string()+"/"+args[x];
-            db.push(buffer, file_path) ;
-            v.push(file_path, args[x]) ;
-        }
-    }
-    if (args[1] == "help")
-    {
+    if (map.contains(commandName)) {
+        map[commandName](args); // Call the function
+    } else {
+        std::cerr << "Unknown command: " << commandName << "\n";
         std::cout << HELP_MESSAGE;
     }
-    if (args[1] == "pop")
-    {
-
-    }
+    
 
     return 0;
 }

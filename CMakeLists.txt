@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SOURCES 
     src/main.cpp
     src/vault.cpp
+    src/silo.cpp
     src/storage.cpp
     src/database.cpp
     vendor/sqlite3/sqlite3.c

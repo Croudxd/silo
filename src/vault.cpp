@@ -25,13 +25,8 @@ bool Vault::push(const fs::path& source, std::string name)
 
 bool Vault::pop(const fs::path& destination, std::string name)
 {
-    if (relocate_file(storage.string()+"/"+name, destination)) 
-    {
-        return true;
-    }
-    else {
-        return false;
-    }
+
+    return true;
 }
 
 bool Vault::relocate_file(const fs::path& source, const fs::path& destination) 
