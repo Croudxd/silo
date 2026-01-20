@@ -34,7 +34,10 @@ fs::path get_storage_path()
         base_path = fs::path(xdg_data);
     } else {
         const char* home = std::getenv("HOME");
-        if (!home) return "/tmp/silo_storage";
+        if (!home) {
+            std::cerr << "Warning: HOME environment variable not set, using ~/.silo/storage\n";
+            return fs::path(".silo") / "storage";
+        }
         base_path = fs::path(home) / ".local" / "share";
     }
 
