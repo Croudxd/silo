@@ -4,6 +4,7 @@
 #include "vault.h"
 #include <string>
 #include <iostream>
+#include <vector>
 
 
 Database::~Database()
@@ -84,11 +85,77 @@ int Database::push (std::string buffer, std::string file_path)
     return 0;
 }
 
-int Database::pop (std::string buffer, std::string file_path)
+std::vector<std::string> Database::pop (std::string buffer, std::string file_name)
 {
+    std::vector<std::string> filenames;
+    if (file_name == "")
+    {
+        if (db == nullptr) return filenames;
 
-    return 0;
+        const char* sql = "SELECT filename FROM files WHERE buffer_name = ?;";
+        sqlite3_stmt* stmt;
+
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, buffer.c_str(), -1, SQLITE_STATIC);
+
+            while (sqlite3_step(stmt) == SQLITE_ROW) {
+                const unsigned char* text = sqlite3_column_text(stmt, 0);
+                if (text) {
+                    filenames.push_back(std::string(reinterpret_cast<const char*>(text)));
+                }
+            }
+        }
+        sqlite3_finalize(stmt);
+        return filenames;   
+    }
+    else
+    {
+        const char* sql = "SELECT filename FROM files WHERE buffer_name = ? AND filename = ?;";
+        sqlite3_stmt* stmt;
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) 
+        {
+            sqlite3_bind_text(stmt, 1, buffer.c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, 2, file_name.c_str(), -1, SQLITE_STATIC);
+            while (sqlite3_step(stmt) == SQLITE_ROW) {
+                const unsigned char* text = sqlite3_column_text(stmt, 0);
+                if (text) {
+                    filenames.push_back(std::string(reinterpret_cast<const char*>(text)));
+                }
+            }
+        }
+        sqlite3_finalize(stmt);
+    }
+    return filenames;
 }
 
+int Database::remove_file(std::string buffer, std::string filename) {
+    if (filename == "")
+    {
+        const char* sql = "DELETE FROM files WHERE buffer_name = ?;";
+        sqlite3_stmt* stmt;
 
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, buffer.c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, 2, filename.c_str(), -1, SQLITE_STATIC);
+            
+            sqlite3_step(stmt);
+        }
+        sqlite3_finalize(stmt);
+        return 0;
+    }
+    else
+    {
 
+        const char* sql = "DELETE FROM files WHERE buffer_name = ? AND filename = ?;";
+        sqlite3_stmt* stmt;
+
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, buffer.c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, 2, filename.c_str(), -1, SQLITE_STATIC);
+            
+            sqlite3_step(stmt);
+        }
+        sqlite3_finalize(stmt);
+        return 0;
+    }
+}

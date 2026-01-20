@@ -27,16 +27,16 @@ namespace fs = std::filesystem;
 
 static fs::path path = "/home/ben/temp";
 
-static std::string_view HELP_MESSAGE = 
-    "Silo - A minimalist file stashing utility\n\n"
+constexpr std::string_view HELP_MESSAGE = 
+    "Silo - Minimalist file stashing\n\n"
     "Usage:\n"
-    "  silo push <buffer> <path>    Stash a file into a named buffer\n"
-    "  silo pop  <buffer> <path>    Restore the most recent file from a buffer\n"
-    "  silo list                    Show all buffers and stashed files\n"
+    "  silo push <buffer> <path>    Push a file into a buffer\n"
+    "  silo pop  <buffer> [file...] Restore all files, or specific ones\n"
+    "  silo list [buffer]           List all buffers or files in a buffer\n"
     "  silo help                    Show this message\n\n"
     "Examples:\n"
-    "  silo push work report.pdf\n"
-    "  silo pop work\n";
+    "  silo pop work                # Restores everything in 'work'\n"
+    "  silo pop work notes.txt      # Restores only 'notes.txt'\n";
 
 
 int main (int argc, char* argv[])

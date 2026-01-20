@@ -1,4 +1,5 @@
 #include "silo.h"
+#include <vector>
 #include <iostream>
 
 
@@ -9,6 +10,21 @@ Silo::~Silo()
 
 void Silo::pop(const std::vector<std::string> &args)
 {
+
+    if ( args.size() < 3)
+    {
+        std::cerr << "Error: No buffer specified \n" << "silo pop  <buffer> Restore all files\n";
+        return ;
+    }
+    if ( args.size() == 3)
+    { 
+        std::vector<std::string> vec = db.pop(args[2], "");
+        v.pop(cwd, vec);
+        db.remove_file(args[2], "");
+    }
+    else {
+        std::cerr << "Error: path specified";
+    }
 }
 
 void Silo::push(const std::vector<std::string> &args)
@@ -16,7 +32,7 @@ void Silo::push(const std::vector<std::string> &args)
 
     if ( args.size() < 4)
     {
-        std::cerr << "Error: No arguments \n" << "silo push <buffer> <path>    Stash a file into a named buffer\n"; 
+        std::cerr << "Error: No paths specified \n" << "silo push <buffer> <path>    Stash a file into a named buffer\n"; 
         return ;
     }
 

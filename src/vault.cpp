@@ -1,4 +1,5 @@
 #include "vault.h"
+#include <vector>
 #include <iostream>
 
 
@@ -23,10 +24,24 @@ bool Vault::push(const fs::path& source, std::string name)
     }
 }
 
-bool Vault::pop(const fs::path& destination, std::string name)
+bool Vault::pop(const fs::path& destination, std::vector<std::string> names)
 {
-
-    return true;
+    std::cout << "hello";
+    if (!names.empty())
+    {
+        for (auto& name : names)
+        {
+            std::cout << name;
+            if(relocate_file(storage.string()+"/"+name, destination))
+            {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    return false;
 }
 
 bool Vault::relocate_file(const fs::path& source, const fs::path& destination) 
