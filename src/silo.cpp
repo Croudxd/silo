@@ -45,3 +45,22 @@ void Silo::push(const std::vector<std::string> &args)
     }
 }
 
+void Silo::list(const std::vector<std::string> &args)
+{
+    if ( args.size() == 2)
+    {
+        auto buffers = db.list_buffers();
+        for ( auto& name : buffers)
+        {
+            std::cout << name << std::endl;
+        }
+    }
+    else
+    {
+        auto buffers = db.pop(args[2], "");
+        for ( auto& name : buffers)
+        {
+            std::cout << name << std::endl;
+        }
+    }
+}
