@@ -64,7 +64,7 @@ constexpr std::string_view HELP_MESSAGE =
 
 int main (int argc, char* argv[])
 {
-    if ( argc <= 2 ) 
+    if ( argc < 2 ) 
     { 
         std::cerr << HELP_MESSAGE;
         return 0;

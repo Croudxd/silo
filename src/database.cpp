@@ -77,6 +77,23 @@ int Database::push(std::string buffer, std::string file_path) {
     return (rc == SQLITE_DONE) ? 0 : -1;
 }
 
+std::vector<std::string> Database::list_buffers()
+{
+    std::vector<std::string> buffers;
+    const char* sql = "SELECT buffer_name FROM buffers;";
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) 
+    {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            const unsigned char* text = sqlite3_column_text(stmt, 0);
+            if (text) {
+                buffers.push_back(std::string(reinterpret_cast<const char*>(text)));
+            }
+        }
+    }
+    return buffers;
+}
+
 std::vector<std::string> Database::pop (std::string buffer, std::string file_name)
 {
     std::vector<std::string> filenames;

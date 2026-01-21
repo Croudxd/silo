@@ -15,6 +15,7 @@ class Database
        ~Database ();
        int push (std::string buffer, std::string file_path);
        int remove_file(std::string buffer, std::string filename);
+       std::vector<std::string> list_buffers();
        std::vector<std::string> pop (std::string buffer, std::string file_path);
        std::string get_path ();
 };

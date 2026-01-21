@@ -20,6 +20,7 @@ class Silo
             this->map = {
                 {"push", [this](auto& args) { push(args); }},
                 {"pop",  [this](auto& args) { pop(args); }},
+                {"list", [this](auto& args) { list(args); }},
             };       
 
        }
@@ -34,5 +35,5 @@ class Silo
         fs::path &cwd;
         void pop(const std::vector<std::string> &args);
         void push(const std::vector<std::string> &args);
-
+        void list(const std::vector<std::string> &args);
 };
