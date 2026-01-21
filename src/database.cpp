@@ -1,5 +1,4 @@
-#include "database.h"
-#include <sqlite3.h>
+#include "database.h" #include <sqlite3.h>
 #include "storage.h"
 #include "vault.h"
 #include <string>
@@ -26,15 +25,15 @@ bool Database::init()
     const char* sql = 
         "PRAGMA foreign_keys = ON;" 
         "CREATE TABLE IF NOT EXISTS buffers ("
-        "  buffer_index INTEGER PRIMARY KEY"
+        "  buffer_name TEXT PRIMARY KEY"
         ");"
         "CREATE TABLE IF NOT EXISTS files ("
         "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "  buffer_index TEXT NOT NULL,"
+        "  buffer_name TEXT NOT NULL,"
         "  original_path TEXT NOT NULL,"
         "  filename TEXT NOT NULL,"
         "  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,"
-        "  FOREIGN KEY(buffer_index) REFERENCES buffers(buffer_index) ON DELETE CASCADE"
+        "  FOREIGN KEY(buffer_name) REFERENCES buffers(buffer_name) ON DELETE CASCADE"
         ");";
 
 
@@ -48,13 +47,11 @@ bool Database::init()
     return true;
 }
 
-int Database::push (std::string buffer, std::string file_path)
-{
-    if ( db == nullptr ) return -1;
+int Database::push(std::string buffer, std::string file_path) {
+    if (db == nullptr) return -1;
 
     const char* b_sql = "INSERT OR IGNORE INTO buffers (buffer_name) VALUES (?);";
     sqlite3_stmt* b_stmt;
-    
     if (sqlite3_prepare_v2(db, b_sql, -1, &b_stmt, nullptr) == SQLITE_OK) {
         sqlite3_bind_text(b_stmt, 1, buffer.c_str(), -1, SQLITE_STATIC);
         sqlite3_step(b_stmt);
@@ -64,25 +61,20 @@ int Database::push (std::string buffer, std::string file_path)
     fs::path source_path = fs::absolute(file_path);
     if (!fs::exists(source_path)) return -1;
 
-    const char* f_sql = "INSERT INTO files (buffer_name, original_path, filename) VALUES (?, ?, ?);";
+    const char* f_sql = "INSERT OR REPLACE INTO files (buffer_name, original_path, filename) VALUES (?, ?, ?);";
     sqlite3_stmt* f_stmt;
 
     if (sqlite3_prepare_v2(db, f_sql, -1, &f_stmt, nullptr) != SQLITE_OK) return -1;
 
     sqlite3_bind_text(f_stmt, 1, buffer.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(f_stmt, 2, source_path.string().c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(f_stmt, 3, source_path.filename().string().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(f_stmt, 2, source_path.string().c_str(), -1, SQLITE_TRANSIENT);
+    // Extract JUST the filename for clean popping later
+    sqlite3_bind_text(f_stmt, 3, source_path.filename().string().c_str(), -1, SQLITE_TRANSIENT);
 
-    if (sqlite3_step(f_stmt) != SQLITE_DONE) {
-        sqlite3_finalize(f_stmt);
-        return -1;
-    }
-
+    int rc = sqlite3_step(f_stmt);
     sqlite3_finalize(f_stmt);
 
-
-
-    return 0;
+    return (rc == SQLITE_DONE) ? 0 : -1;
 }
 
 std::vector<std::string> Database::pop (std::string buffer, std::string file_name)
@@ -102,6 +94,7 @@ std::vector<std::string> Database::pop (std::string buffer, std::string file_nam
                 const unsigned char* text = sqlite3_column_text(stmt, 0);
                 if (text) {
                     filenames.push_back(std::string(reinterpret_cast<const char*>(text)));
+
                 }
             }
         }
@@ -136,8 +129,6 @@ int Database::remove_file(std::string buffer, std::string filename) {
 
         if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
             sqlite3_bind_text(stmt, 1, buffer.c_str(), -1, SQLITE_STATIC);
-            sqlite3_bind_text(stmt, 2, filename.c_str(), -1, SQLITE_STATIC);
-            
             sqlite3_step(stmt);
         }
         sqlite3_finalize(stmt);

@@ -39,7 +39,7 @@ void Silo::push(const std::vector<std::string> &args)
     std::string buffer = args[2];
     for ( auto x = 3; x < args.size(); x++)
     { 
-        auto file_path = cwd.string()+"/"+args[x];
+        auto file_path = cwd / args[x];
         db.push(buffer, file_path) ;
         v.push(file_path, args[x]) ;
     }
