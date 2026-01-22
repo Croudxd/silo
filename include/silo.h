@@ -18,8 +18,12 @@ class Silo
         Silo(Vault &v, Database &db, fs::path &cwd) : v(v),  db(db), cwd(cwd)
         {
             this->map = {
-                {"push", [this](auto& args) { push(args); }},
+                {"stash", [this](auto& args) { push(args); }},
+                {"s",    [this](auto& args) { push(args); }},
+
                 {"pop",  [this](auto& args) { pop(args); }},
+                {"p"  ,  [this](auto& args) { pop(args); }},
+
                 {"list", [this](auto& args) { list(args); }},
             };       
 

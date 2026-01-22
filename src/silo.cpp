@@ -7,7 +7,6 @@ Silo::~Silo()
 {
 
 }
-
 void Silo::pop(const std::vector<std::string> &args)
 {
 
@@ -37,7 +36,7 @@ void Silo::push(const std::vector<std::string> &args)
     }
 
     std::string buffer = args[2];
-    for ( auto x = 3; x < args.size(); x++)
+    for ( size_t x = 3; x < args.size(); x++)
     { 
         auto file_path = cwd / args[x];
         db.push(buffer, file_path) ;
