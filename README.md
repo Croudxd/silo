@@ -25,7 +25,7 @@ cmake .. && make -j
 To use simple type in shell:
 ```
 silo stash (s) <buffer> <path>    Push a file into a buffer\n"
-silo pop (p) <buffer> [file...] Restore all files, or specific ones\n"
-silo list [buffer]           List all buffers or files in a buffer\n"
-silo help                    Show this message\n\n"
+silo pop (p) <buffer> [file...]   Restore all files, or specific ones\n"
+silo list [buffer]                List all buffers or files in a buffer\n"
+silo help                         Show this message\n\n"
 ```
