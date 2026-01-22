@@ -10,9 +10,15 @@ I want to be able to integrate this into yazi and neovim. For now its just a CLI
 
 ## To build
 
-``` git clone https://github.com/Croudxd/silo.git```
-```cd silo && mkdir build```
-```cmake .. && make -j```
+``` 
+git clone https://github.com/Croudxd/silo.git
+```
+```
+cd silo && mkdir build
+```
+```
+cmake .. && make -j
+```
 
 ## To use
 
