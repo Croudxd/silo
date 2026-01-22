@@ -87,6 +87,7 @@ int main (int argc, char* argv[])
         std::cerr << "Unknown command: " << commandName << "\n";
         std::cerr << HELP_MESSAGE;
     }
+
     
 
     return 0;
