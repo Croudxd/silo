@@ -41,3 +41,4 @@ class Silo
         void push(const std::vector<std::string> &args);
         void list(const std::vector<std::string> &args);
 };
+
