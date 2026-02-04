@@ -139,6 +139,18 @@ std::vector<std::string> Database::pop (std::string buffer, std::string file_nam
 }
 
 int Database::remove_file(std::string buffer, std::string filename) {
+    if(buffer == "*")
+    {
+        const char* sql = "DELETE FROM buffers;"; 
+    
+        char* errorMessage = nullptr;
+        if (sqlite3_exec(db, sql, nullptr, nullptr, &errorMessage) != SQLITE_OK) 
+        {
+            std::cerr << "SQL Error: " << errorMessage << std::endl;
+            sqlite3_free(errorMessage);
+            return -1;
+        }
+    }
     if (filename == "")
     {
         const char* sql = "DELETE FROM files WHERE buffer_name = ?;";
@@ -153,7 +165,6 @@ int Database::remove_file(std::string buffer, std::string filename) {
     }
     else
     {
-
         const char* sql = "DELETE FROM files WHERE buffer_name = ? AND filename = ?;";
         sqlite3_stmt* stmt;
 
@@ -167,3 +178,5 @@ int Database::remove_file(std::string buffer, std::string filename) {
         return 0;
     }
 }
+
+
