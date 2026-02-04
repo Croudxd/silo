@@ -56,6 +56,7 @@ constexpr std::string_view HELP_MESSAGE =
     "  silo stash <buffer> <path>    Push a file into a buffer\n"
     "  silo pop   <buffer> [file...] Restore all files, or specific ones\n"
     "  silo list  [buffer]           List all buffers or files in a buffer\n"
+    "  silo clear                    Clears the database\n"
     "  silo help                     Show this message\n\n"
     "Examples:\n"
     "  silo pop work                 # Restores everything in 'work'\n"
