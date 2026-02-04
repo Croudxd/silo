@@ -12,20 +12,16 @@ I want to be able to integrate this into yazi and neovim. For now its just a CLI
 
 ``` 
 git clone https://github.com/Croudxd/silo.git
-```
-```
 cd silo && mkdir build
-```
-```
-cmake .. && make -j
+cd build && cmake .. && make -j
 ```
 
 ## To use
 
 To use simple type in shell:
 ```
-silo stash (s) <buffer> <path>    Push a file into a buffer\n"
-silo pop (p) <buffer> [file...]   Restore all files, or specific ones\n"
-silo list [buffer]                List all buffers or files in a buffer\n"
-silo help                         Show this message\n\n"
+silo stash (s) <buffer> <path>    Push a file into a buffer
+silo pop (p) <buffer> [file...]   Restore all files, or specific ones
+silo list [buffer]                List all buffers or files in a buffer
+silo help                         Show this message
 ```

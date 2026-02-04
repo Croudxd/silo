@@ -53,13 +53,13 @@ fs::path get_storage_path()
 constexpr std::string_view HELP_MESSAGE = 
     "Silo - Minimalist file stashing\n\n"
     "Usage:\n"
-    "  silo push <buffer> <path>    Push a file into a buffer\n"
-    "  silo pop  <buffer> [file...] Restore all files, or specific ones\n"
-    "  silo list [buffer]           List all buffers or files in a buffer\n"
-    "  silo help                    Show this message\n\n"
+    "  silo stash <buffer> <path>    Push a file into a buffer\n"
+    "  silo pop   <buffer> [file...] Restore all files, or specific ones\n"
+    "  silo list  [buffer]           List all buffers or files in a buffer\n"
+    "  silo help                     Show this message\n\n"
     "Examples:\n"
-    "  silo pop work                # Restores everything in 'work'\n"
-    "  silo pop work notes.txt      # Restores only 'notes.txt'\n";
+    "  silo pop work                 # Restores everything in 'work'\n"
+    "  silo pop work notes.txt       # Restores only 'notes.txt'\n";
 
 
 int main (int argc, char* argv[])
