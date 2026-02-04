@@ -20,9 +20,18 @@ void Silo::pop(const std::vector<std::string> &args)
         std::vector<std::string> vec = db.pop(args[2], "");
         v.pop(cwd, vec);
         db.remove_file(args[2], "");
+        return;
+    }
+    if ( args.size() == 4)
+    { 
+        std::vector<std::string> vec = db.pop(args[2], args[3]);
+        v.pop(cwd, vec);
+        db.remove_file(args[2], args[3]);
+        return;
     }
     else {
         std::cerr << "Error: path specified";
+        return;
     }
 }
 
