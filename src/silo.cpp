@@ -35,6 +35,26 @@ void Silo::pop(const std::vector<std::string> &args)
     }
 }
 
+void Silo::clear ()
+{
+    std::cout << "Are you sure? [y/n]";
+    std::string str;
+    std::cin >> str;
+
+    if (str == "y" || str == "Y") 
+    {
+        db.remove_file("*", "*");
+        return;
+    }
+    else
+    {
+        return;
+    }
+
+    // Right now this leaves the file in the the .local/share.
+    // When i implement a restore function, we can call it here to restore any files back to their original location as a safe guard rather than deleting.
+}
+
 void Silo::push(const std::vector<std::string> &args)
 {
 
