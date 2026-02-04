@@ -10,7 +10,7 @@ I want to be able to integrate this into yazi and neovim. For now its just a CLI
 
 ## To build
 
-``` 
+```shell 
 git clone https://github.com/Croudxd/silo.git
 cd silo && mkdir build
 cd build && cmake .. && make -j
@@ -19,9 +19,10 @@ cd build && cmake .. && make -j
 ## To use
 
 To use simple type in shell:
-```
+```shell
 silo stash (s) <buffer> <path>    Push a file into a buffer
 silo pop (p) <buffer> [file...]   Restore all files, or specific ones
 silo list [buffer]                List all buffers or files in a buffer
+silo clear                        Clears database (all buffers and filenames)                        
 silo help                         Show this message
 ```
